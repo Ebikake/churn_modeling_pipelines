@@ -111,3 +111,37 @@ class ModelComparator:
             plt.show()
 
         return df
+
+    @staticmethod
+    def plot_composite_scores_with_labels(df):
+        """
+        Plots composite scores per model and adds score labels on each bar.
+        """
+        import matplotlib.pyplot as plt
+        import seaborn as sns
+
+        plt.figure(figsize=(10, 5))
+        ax = sns.barplot(
+            data=df,
+            x='Model',
+            y='Composite Score',
+            hue='is_overall_best',
+            dodge=False,
+            palette=['#4B73B8' if best == '✅ Best' else '#CC8455' for best in df['is_overall_best']]
+        )
+
+        # Annotate each bar with its composite score
+        for p in ax.patches:
+            height = p.get_height()
+            ax.annotate(f'{height:.2f}',
+                        (p.get_x() + p.get_width() / 2., height),
+                        ha='center', va='bottom', fontsize=10, fontweight='bold')
+
+        plt.title("Composite Score per Model")
+        plt.xlabel("Model")
+        plt.ylabel("Composite Score")
+        plt.xticks(rotation=45)
+        plt.legend(title='is_overall_best')
+        plt.tight_layout()
+        plt.show()
+
